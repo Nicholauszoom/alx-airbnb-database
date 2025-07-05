@@ -2,22 +2,18 @@
 -- Please log an issue at https://github.com/pgadmin-org/pgadmin4/issues/new/choose if you find any bugs, including reproduction steps.
 BEGIN;
 
--- Initial query: Get all bookings with user, property, and payment details
+-- Initial Query with full joins and EXPLAIN
 EXPLAIN ANALYZE
 SELECT 
     bookings.id AS booking_id,
     bookings.start_date,
     bookings.end_date,
-    
     users.id AS user_id,
     users.name AS user_name,
     users.email,
-
     properties.id AS property_id,
     properties.title,
-    properties.region,
-    properties.country
-
+    properties.location,
     payments.id AS payment_id,
     payments.amount,
     payments.status
@@ -29,6 +25,25 @@ JOIN
     properties ON bookings.property_id = properties.id
 JOIN 
     payments ON bookings.id = payments.booking_id;
+
+
+-- Optimized Query using fewer columns and LEFT JOIN
+EXPLAIN ANALYZE
+SELECT 
+    b.id AS booking_id,
+    b.check_in,
+    b.check_out,
+    u.name AS user_name,
+    p.title AS property_title,
+    pay.amount
+FROM 
+    bookings b
+JOIN 
+    users u ON b.user_id = u.id
+JOIN 
+    properties p ON b.property_id = p.id
+LEFT JOIN 
+    payments pay ON b.id = pay.booking_id;
 
 
 END;
