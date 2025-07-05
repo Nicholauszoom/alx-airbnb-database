@@ -16,14 +16,17 @@ GROUP BY
 
 
 
--- 2. With window function (ROW_NUMBER, RANK) to rank properties based on the total number of bookings they have received
+-- Query: Rank properties based on the total number of bookings using ROW_NUMBER()
 SELECT 
     property_id,
-    COUNT(*) AS total_bookings,
-    RANK() OVER (ORDER BY COUNT(*) DESC) AS booking_rank
-FROM 
-    bookings
-GROUP BY 
-    property_id;
-
-END;
+    total_bookings,
+    ROW_NUMBER() OVER (ORDER BY total_bookings DESC) AS booking_rank
+FROM (
+    SELECT 
+        property_id,
+        COUNT(*) AS total_bookings
+    FROM 
+        bookings
+    GROUP BY 
+        property_id
+) AS property_booking_counts;
