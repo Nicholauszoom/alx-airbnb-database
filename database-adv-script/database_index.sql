@@ -31,5 +31,12 @@ CREATE INDEX idx_bookings_end_date ON bookings(end_date);
 -- Index on host_id to retrieve all properties by a host
 CREATE INDEX idx_properties_host_id ON properties(host_id);
 
+ -- TESTING PERFORMANCE 
+
+ EXPLAIN ANALYZE
+ SELECT users.name, COUNT(bookings.id) AS total_booking FROM users
+ JOIN booings ON users.id = bookings.user_id
+ GROUP BY users.name;
+
 
 END;
