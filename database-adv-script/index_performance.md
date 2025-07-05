@@ -3,18 +3,17 @@
 ##  File: `database_index.sql`
 
 ### Index Optimization:
-This file defines indexes for frequently queried columns to improve performance in large datasets.
+This file defines indexes for frequently queries columns to improve performance in large data.
 
 #### Users Table:
-- `email`: Speeds up authentication lookups.
+- `email`: Good performance query for authentication by users.email.
 
 #### Bookings Table:
 - `user_id`: Speeds up joins and filters by user.
-- `property_id`: Used in property-based booking queries.
-- `check_in` and `check_out`: Improve date filtering performance.
+- `property_id`: Good performance query when filter Booking by property_id.
+- `start_date` and `end_date`: Good performance query when filter Bookings by start_date/end_date.
 
 #### Properties Table:
-- `host_id`: Allows quick retrieval of properties listed by a host.
-- `location`: Optimizes search queries by location.
+- `host_id`: Good performance query when filter Properties by host/user.
 
-These indexes are essential for improving query response time and system scalability.
+Indexes to improve query performance 
