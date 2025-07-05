@@ -38,9 +38,18 @@ This file includes:
 
 ---
 
+## File: `aggregations_and_window_functions.sql` *(New)*
+
+### Included aggregations_and_window_functions Queries:
+- **Total Bookings Per User:** Uses `COUNT()` and `GROUP BY` to find how many bookings each user has made.
+- **Property Booking Rankings:** Uses `RANK()` window function to rank properties by number of bookings received.
+
+---
+
 ## Technologies
 
 - SQL (PostgreSQL / MySQL)
-- Relational Database Concepts
-- Joins and Subqueries
+- Relational database design
+- Aggregations and filtering
+- Window functions for analytics
 
