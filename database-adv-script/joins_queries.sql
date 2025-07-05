@@ -46,6 +46,8 @@ FROM
 FROM
 	PROPERTIES
 	LEFT JOIN REVIEWS ON REVIEWS.PROPERTY_ID = PROPERTY_ID;
+ORDER BY 
+    PROPERTIES.ID;
 
 -- 3. FULL OUTER JOIN: Get all users and all bookings, even if unmatched
 -- For PostgreSQL:
