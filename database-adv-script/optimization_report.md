@@ -1,0 +1,43 @@
+#  Performance Initial Query with full joins and EXPLAIN
+
+"Hash Join  (cost=3.19..16.65 rows=250 width=1160) (actual time=1.620..1.629 rows=2 loops=1)"
+"  Hash Cond: (payments.booking_id = bookings.id)"
+"  ->  Seq Scan on payments  (cost=0.00..12.50 rows=250 width=166) (actual time=0.644..0.646 rows=2 loops=1)"
+"  ->  Hash  (cost=3.17..3.17 rows=2 width=1010) (actual time=0.562..0.565 rows=2 loops=1)"
+"        Buckets: 1024  Batches: 1  Memory Usage: 9kB"
+"        ->  Nested Loop  (cost=0.00..3.17 rows=2 width=1010) (actual time=0.537..0.546 rows=2 loops=1)"
+"              Join Filter: (bookings.property_id = properties.id)"
+"              Rows Removed by Join Filter: 1"
+"              ->  Nested Loop  (cost=0.00..2.09 rows=2 width=592) (actual time=0.461..0.466 rows=2 loops=1)"
+"                    Join Filter: (bookings.user_id = users.id)"
+"                    Rows Removed by Join Filter: 1"
+"                    ->  Seq Scan on bookings  (cost=0.00..1.02 rows=2 width=56) (actual time=0.065..0.067 rows=2 loops=1)"
+"                    ->  Materialize  (cost=0.00..1.03 rows=2 width=552) (actual time=0.030..0.032 rows=2 loops=2)"
+"                          ->  Seq Scan on users  (cost=0.00..1.02 rows=2 width=552) (actual time=0.045..0.046 rows=2 loops=1)"
+"              ->  Materialize  (cost=0.00..1.03 rows=2 width=434) (actual time=0.036..0.037 rows=2 loops=2)"
+"                    ->  Seq Scan on properties  (cost=0.00..1.02 rows=2 width=434) (actual time=0.063..0.064 rows=2 loops=1)"
+"Planning Time: 43.344 ms"
+"Execution Time: 2.319 ms"
+
+
+#  Performance of the query included the Unnnecessary JOIN (LEFT JOIN)
+We expect this will take longer to execute because has unnessery JOIN incuded.
+
+"Hash Right Join  (cost=3.19..16.65 rows=250 width=676) (actual time=1.803..1.812 rows=2 loops=1)"
+"  Hash Cond: (pay.booking_id = b.id)"
+"  ->  Seq Scan on payments pay  (cost=0.00..12.50 rows=250 width=32) (actual time=0.270..0.271 rows=2 loops=1)"
+"  ->  Hash  (cost=3.17..3.17 rows=2 width=660) (actual time=1.398..1.400 rows=2 loops=1)"
+"        Buckets: 1024  Batches: 1  Memory Usage: 9kB"
+"        ->  Nested Loop  (cost=0.00..3.17 rows=2 width=660) (actual time=1.013..1.022 rows=2 loops=1)"
+"              Join Filter: (b.property_id = p.id)"
+"              Rows Removed by Join Filter: 1"
+"              ->  Nested Loop  (cost=0.00..2.09 rows=2 width=258) (actual time=0.743..0.748 rows=2 loops=1)"
+"                    Join Filter: (b.user_id = u.id)"
+"                    Rows Removed by Join Filter: 1"
+"                    ->  Seq Scan on bookings b  (cost=0.00..1.02 rows=2 width=56) (actual time=0.340..0.342 rows=2 loops=1)"
+"                    ->  Materialize  (cost=0.00..1.03 rows=2 width=234) (actual time=0.022..0.024 rows=2 loops=2)"
+"                          ->  Seq Scan on users u  (cost=0.00..1.02 rows=2 width=234) (actual time=0.034..0.035 rows=2 loops=1)"
+"              ->  Materialize  (cost=0.00..1.03 rows=2 width=434) (actual time=0.134..0.135 rows=2 loops=2)"
+"                    ->  Seq Scan on properties p  (cost=0.00..1.02 rows=2 width=434) (actual time=0.260..0.261 rows=2 loops=1)"
+"Planning Time: 9.045 ms"
+"Execution Time: 2.677 ms"
