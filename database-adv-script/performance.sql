@@ -31,8 +31,8 @@ JOIN
 EXPLAIN ANALYZE
 SELECT 
     b.id AS booking_id,
-    b.check_in,
-    b.check_out,
+    b.start_date,
+    b.end_date,
     u.name AS user_name,
     p.title AS property_title,
     pay.amount
