@@ -24,7 +24,7 @@ JOIN
 JOIN 
     properties ON bookings.property_id = properties.id
 JOIN 
-    payments ON bookings.id = payments.booking_id;
+    payments ON bookings.id = payments.booking_id
 WHERE 
     bookings.status = 'confirmed'
     AND payments.status = 'paid';
